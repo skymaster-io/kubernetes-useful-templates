@@ -1,0 +1,12 @@
+{{/* 
+	Description: Output csv output with the requested resources of all containers inside a pod
+*/ -}}
+creationTimestamp, namesppace, pod-name, container-name, cpu , memory
+{{ range .items -}}
+	{{ printf "%s, %s, %s " .metadata.creationTimestamp .metadata.namespace  .metadata.name }}
+	{{-  range .spec.containers }}
+		{{- $cpu := .resources.requests.cpu  }}{{ if not .resources.requests.cpu }}{{ $cpu = "" }}{{end}}
+		{{- $mem := .resources.requests.memory  }}{{ if not .resources.requests.memory }}{{ $mem = "" }}{{end}}
+	{{- printf ",%s, %s, %s," .name $cpu $mem -}}
+	{{end }}
+{{end}}
